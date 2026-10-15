@@ -25,7 +25,7 @@ def _chip_html(kind: str) -> str:
     label, bg, fg = _CHIPS[kind]
     return (
         f"<span style='background:{bg};color:{fg};padding:2px 10px;"
-        "border-radius:4px;font-size:0.8rem'>{label}</span>"
+        f"border-radius:4px;font-size:0.8rem'>{label}</span>"
     )
 
 
@@ -60,6 +60,12 @@ col_cities, col_overlap = st.columns(2)
 col_cities.metric("Cities", len(selected))
 col_overlap.metric("Overlapping hours (next 7 days)", f"{overlap:.1f} h")
 
+if selected and overlap == 0.0:
+    st.warning(
+        "No overlapping hours: no window in the next 7 days where all "
+        "selected cities are within 09:00–17:00 local time."
+    )
+
 if selected:
     st.subheader("Local clocks")
     clock_cols = st.columns(min(len(selected), 4))
@@ -81,9 +87,7 @@ if selected:
     )
     for city in selected:
         local_now = now.astimezone(ZoneInfo(city.iana_tz))
-        st.markdown(
-            f"**{city.name}** — {local_now:%a} {local_now:%Y-%m-%d} local · green = overlap"
-        )
+        st.markdown(f"**{city.name}** — {local_now:%a} {local_now:%Y-%m-%d} local")
         st.markdown(
             _hour_cells_html(daily_grid(local_now.date(), city, selected)),
             unsafe_allow_html=True,

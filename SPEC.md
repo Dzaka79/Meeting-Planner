@@ -8,8 +8,8 @@ time zones.
 - Stack: Python 3.14, Streamlit 1.66, pytest 9.1.1.
 - Time zones: stdlib `zoneinfo` + `tzdata` (Windows has no IANA database of its own).
 - This spec defines the domain logic (`logic.py`), its data structures, and the
-  acceptance criteria (`test_logic.py` maps to §6, TC1–TC10; TC11–TC12 belong to
-  the future Streamlit app layer).
+  acceptance criteria (`test_logic.py` maps to §6, TC1–TC10; `test_app.py` maps
+  to the app-layer cases TC13, while TC11–TC12 remain to be written).
 
 ## 2. UI layout (reference: provided screenshot)
 
@@ -26,7 +26,7 @@ time zones.
     no auto-refresh dependency).
   - **24-hour local view**: legend chips — `Working hours` (blue),
     `Overlapping hours` (green), `Outside working hours` (gray); then one row per
-    city labelled `{City} — {Www} {YYYY-MM-DD} local · green = overlap` followed
+    city labelled `{City} — {Www} {YYYY-MM-DD} local` followed
     by 24 hour cells `00`–`23`.
 
 ## 3. Features
@@ -37,6 +37,8 @@ time zones.
 - **F2 — Metrics**: `Cities` = number of selected cities.
   `Overlapping hours (next 7 days)` = total hours in the next 7 days when *all*
   selected cities are inside working hours, displayed with one decimal (`5.0 h`).
+  If the metric is `0.0 h` while at least one city is selected, the app shows a
+  warning (empty selection never warns).
 - **F3 — Local clocks**: current `HH:MM:SS`, weekday, and UTC offset per selected
   city, refreshed on interaction only.
 - **F4 — 24-hour local view**: for each selected city, 24 hourly cells for that
@@ -204,7 +206,7 @@ time zones.
 - **When** it renders
 - **Then** the sidebar lists the 36 catalog cities, the title, subtitle, metric
   labels (`Cities`, `Overlapping hours (next 7 days)`), the three legend chips,
-  and the per-city row label format `{City} — {Www} {YYYY-MM-DD} local · green = overlap`
+  and the per-city row label format `{City} — {Www} {YYYY-MM-DD} local`
   are present.
 
 ### TC12 — UI interaction (app layer, future `test_app.py`)
@@ -214,6 +216,15 @@ time zones.
   the overlap metric shows `5.0 h` (at the reference clock), two clock cards
   and two 24-cell grid rows render; deselecting everything returns the F6
   empty state.
+
+### TC13 — Zero-overlap warning (app layer, `test_app.py`)
+- **Given** the running app with Tokyo (UTC+9) and London selected — 8 h apart,
+  so their 8 h working windows never intersect
+- **When** the metrics render
+- **Then** the overlap metric shows `0.0 h` and exactly one warning is
+  displayed (message contains `No overlapping hours`); **and** no warning is
+  shown when the overlap is positive (e.g. London + Bali) or when no cities
+  are selected.
 
 ## 7. Non-goals
 

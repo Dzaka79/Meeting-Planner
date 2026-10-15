@@ -5,7 +5,8 @@
 Spec-first: `SPEC.md` defines features, data structures, and acceptance criteria.
 - `logic.py` — pure domain logic (no Streamlit imports).
 - `app.py` — Streamlit UI (entrypoint; uses only `logic.py` for domain work).
-- `test_logic.py` — acceptance tests TC1–TC10 (TC11–TC12 are UI tests for the app, not written yet).
+- `test_logic.py` — acceptance tests TC1–TC10.
+- `test_app.py` — app-layer tests via `streamlit.testing.v1.AppTest` (TC13; TC11–TC12 not written yet).
 
 ## Environment
 
