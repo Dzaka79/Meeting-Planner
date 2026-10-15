@@ -16,6 +16,7 @@ time zones.
 - **Sidebar — "Cities"**: help text *Add or remove cities*; a chip multiselect
   (removable chips, e.g. `London ×` `Bali ×`); caption `N of 36 cities selected`.
 - **Main**:
+  - Banner image (`assets/banner.jpg`) rendered full width at the very top.
   - H1 `Borderless Meeting Planner`.
   - Subtitle `Find a window where every city is inside 09:00–17:00 local time.`
   - Metrics row: `Cities` (integer count) and

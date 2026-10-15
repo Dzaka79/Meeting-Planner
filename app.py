@@ -1,6 +1,7 @@
 """Streamlit UI for the Borderless Meeting Planner (SPEC.md §2)."""
 
 from datetime import datetime, timezone
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import streamlit as st
@@ -8,6 +9,8 @@ import streamlit as st
 from logic import CITIES, HourStatus, daily_grid, local_clock, overlap_hours
 
 st.set_page_config(page_title="Borderless Meeting Planner", layout="wide")
+
+_BANNER = Path(__file__).parent / "assets" / "banner.jpg"
 
 _CHIPS = {
     "working": ("Working hours", "#3b82f6", "#ffffff"),
@@ -50,6 +53,7 @@ selected: list = st.sidebar.multiselect(
 )
 st.sidebar.caption(f"{len(selected)} of {len(CITIES)} cities selected")
 
+st.image(str(_BANNER), width="stretch", alt="Borderless Meeting Planner banner")
 st.title("Borderless Meeting Planner")
 st.caption("Find a window where every city is inside 09:00–17:00 local time.")
 
